@@ -1,0 +1,102 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inherits HomeModel;
+
+<PageTitle>Quiz</PageTitle>
+
+@{
+    if(QuestionsLoaded == false || TakeTheQuiz)
+    {
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <MudPaper Class="p-4">
+                        @if(!TakeTheQuiz)
+                        {
+                            <h1 class="mb-4">Hello, and welcome to my quiz project!</h1>
+                         }
+                        <div class="mb-3">
+                             @if(!TakeTheQuiz)
+                            {
+                                <MudTextField @bind-Value="Name" Label="Name" Variant="Variant.Filled"></MudTextField>
+                            }
+                            <MudNumericField @bind-Value="NumberOfQuestionsToAsk" Label="Number of questions" Variant="Variant.Filled" Min="0" />
+                            <MudNumericField @bind-Value="TimeLimit" Label="Time limit for quiz" Variant="Variant.Filled" Min="0" />
+                        </div>
+                        <div class="mb-3">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+                                <ButtonTemplate>
+                                    <MudButton HtmlTag="label"
+                                            Variant="Variant.Filled"
+                                            Color="Color.Primary"
+                                            StartIcon="@Icons.Material.Filled.CloudUpload"
+                                            for="@context.Id">
+                                        Upload Files
+                                    </MudButton>
+                                </ButtonTemplate>
+                                <SelectedTemplate>
+                                    @if (context != null)
+                                    {
+                                        <MudText>@context.Name</MudText>
+                                    }
+                                    else
+                                    {
+                                        <MudText>No File</MudText>
+                                    }
+                                </SelectedTemplate>
+                            </MudFileUpload>
+                        </div>
+
+                        @{
+                            if(ErrorSaving && string.IsNullOrEmpty(Name))
+                            {
+                                <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">Name is required!</MudAlert>
+                            }
+                            else if (ErrorSaving && NumberOfQuestionsToAsk <= 0)
+                            {
+                                <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">Number of questions must be greater than 0!</MudAlert>
+                            }
+                            else if (ErrorSaving && TimeLimit <= 0)
+                            {
+                                <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">Time limit must be greater than 0!</MudAlert>
+                            }
+                            else if (ErrorSaving && !files.Any())
+                            {
+                                <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">Question file is required!</MudAlert>
+                            }
+                            else if(ErrorSaving && ProblemReadingFile)
+                            {
+                                <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">Problem Reading File.</MudAlert>
+                            }
+                            
+                            if(ValidInfoSaving)
+                            {
+                                <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+                                <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+                                <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+                                <MudProgressCircular Color="Color.Success" Indeterminate="true" />
+                                <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+                            }
+                        }
+
+                        <p><i class="bi bi-info-circle"></i> (Save) - click save to start the quiz.</p>
+                        <p><i class="bi bi-info-circle"></i> (New User) - this will allow you to take a new quiz as a new user.</p>
+
+                        <div class="d-flex justify-content-end">
+                            <div class="p-2">
+                                <MudButton Variant="Variant.Outlined" Color="Color.Error" Size="Size.Small"  OnClick="NewUserClicked" >New User</MudButton>
+                            </div>
+                            <div class="p-2">
+                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Info" Size="Size.Small" OnClick="SaveClicked">Save</MudButton>
+                            </div>
+                        </div>
+                    </MudPaper>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <Quiz UserName='@Name' UserQuestions='@Questions' UserNumberOfQuestions='@NumberOfQuestionsToAsk' UserTimeLimit='@TimeLimit' uniqueIdString='@uniqueIdString' TakeQuiz='@TakeTheQuiz' TakeQuizChanged="@HandleTakeQuizChanged"/>
+    }    
+}

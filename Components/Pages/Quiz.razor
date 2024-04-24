@@ -1,0 +1,108 @@
+@rendermode InteractiveServer
+@inherits QuizModel;
+
+@{
+    <MudContainer>
+        <MudPaper Class="p-4">
+            @if (CurrentQuestionsAsked != null && CurrentQuestionIndex < CurrentQuestionsAsked.Count && IsTimerRunning)
+            {
+                var question = CurrentQuestionsAsked[CurrentQuestionIndex]; // Get the current question
+                
+                <div class="mb-4">
+                    <h3>@question.Text</h3>
+                    <ul>
+                        <MudRadioGroup T="int" Required="true" RequiredError="Please select an answer" @bind-Value="@SelectedAnswer">
+                            <div class="d-flex flex-column">
+                            @{ var count = 1; } <!-- Initialize count inside the loop -->
+                            @foreach (var answer in question.Answers)
+                            {
+                                <MudRadio Option="@count">@answer</MudRadio>
+                                count++; // Increment count for each answer
+                            }
+                            </div>
+                        </MudRadioGroup>
+                    </ul>
+                </div>
+
+                CurrentAnswer = question.Answer;
+
+                <MudButton Variant="Variant.Filled" Size="Size.Small"  Color="Color.Primary"  OnClick="SubmitAnswer">Submit</MudButton>
+            }
+            else
+            {
+                quizCompleted = true; // Set the flag to true to prevent calling EndQuiz() multiple times
+            }
+
+            @if(IsTimerRunning && !quizCompleted){
+                <p class="mt-4">Time Remaining: @RemainingTime.ToString(@"mm\:ss")</p>
+            }
+            else if (!IsTimerRunning || quizCompleted){   
+                <h1 class="mb-4">Quiz Summary</h1>
+
+                if(!IsTimerRunning){
+                    <p>Time's up!</p>
+                }
+
+                quizCompleted = true;
+                
+
+                <p>Congratulations! You have completed the quiz.</p>
+
+                var correctPercentage = ((float)CorrectAnswers / (float)CurrentQuestionsAsked.Count) * 100;
+                var date = DateTime.Now;
+
+                <div class="user-info mt-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Date:</strong> <span>@date</span></p>
+                            <p><strong>User ID:</strong> <span>@uniqueIdString</span></p>
+                            <p><strong>User Name:</strong> <span>@UserName</span></p>
+                            <p><strong>Total Questions:</strong> <span>@CurrentQuestionsAsked.Count</span></p>
+                            <p><strong>Questions Answered:</strong> <span>@CurrentQuestionIndex</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Correct:</strong> <span>@CorrectAnswers</span></p>
+                            <p><strong>Percentage Correct:</strong> <span>@correctPercentage %</span></p>
+                            <p><strong>Time Limit:</strong> <span>@UserTimeLimit seconds</span></p>
+                            <p><strong>Finished Exam Time:</strong> <span>@FinishedTime</span></p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if(quizCompleted)
+            {
+                <p><i class="bi bi-info-circle"></i> (Take Another Quiz) - this will allow you to take a new quiz as the same user.</p>
+                <p><i class="bi bi-info-circle"></i> (Show All Previous Quiz Attempts) - this will show all previous quiz attempts of the current user.</p>
+
+                <div class="d-flex justify-content-end">
+                    <div class="p-2">
+                        <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="TakeNewQuiz">Take Another Quiz</MudButton>
+                    </div>
+                    <div class="p-2">
+                        <MudButton Variant="Variant.Filled" Color="Color.Info" Size="Size.Small" OnClick="DisplayPreviousQuizAttempts">Show All Previous Quiz Attempts</MudButton>
+                    </div>
+                </div>
+            }
+
+        </MudPaper>
+    </MudContainer>
+    
+    if(PreviousQuizAttempts != null && PreviousQuizAttempts.Any() && !Cleared)
+    {
+        <MudDivider />
+        <MudContainer>
+            <MudPaper Class="p-4">
+                <div class="d-flex justify-content-end">
+                    <MudButton Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" OnClick="ClearResult">Clear Results</MudButton>
+                </div>
+                @{
+                    foreach(var item in PreviousQuizAttempts)
+                    {
+                        <p>@item</p>
+                    }
+                }
+            </MudPaper>
+        </MudContainer>
+    }
+}

@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/emilio/Desktop/School/CS-533/QuizProject/obj/Debug/net8.0/scopedcss/projectbundle/QuizProject.bundle.scp.css",
+      "PackagePath": "staticwebassets/QuizProject.bundle.scp.css"
+    },
+    {
+      "Id": "/Users/emilio/Desktop/School/CS-533/QuizProject/wwwroot/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/Users/emilio/Desktop/School/CS-533/QuizProject/wwwroot/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Users/emilio/Desktop/School/CS-533/QuizProject/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "/Users/emilio/Desktop/School/CS-533/QuizProject/wwwroot/styles.css",
+      "PackagePath": "staticwebassets/styles.css"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.QuizProject.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.QuizProject.props",
+      "PackagePath": "build\\QuizProject.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.QuizProject.props",
+      "PackagePath": "buildMultiTargeting\\QuizProject.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.QuizProject.props",
+      "PackagePath": "buildTransitive\\QuizProject.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
